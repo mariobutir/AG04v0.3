@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-public class ArticleResource {
+public class ArticleController {
 
 	@Autowired
 	private ArticleRepository articleRepository;
