@@ -13,32 +13,22 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-        	.authorizeRequests()
-        		.antMatchers("/", "/login").permitAll()
-        		.anyRequest().authenticated()
-        		.and()
-            .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/articles")
-                .and()
-            .logout()
-                .permitAll();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/", "/articles").permitAll().antMatchers("/h2_console/**").hasRole("USER")
+				.anyRequest().authenticated().and().formLogin().defaultSuccessUrl("/articles").loginPage("/login").permitAll().and().logout()
+				.permitAll();
+		http.exceptionHandling().accessDeniedPage("/403");
+		http.csrf().disable();
+		http.headers().frameOptions().disable();
+	}
 
-    @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	@Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-             User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
+	@Override
+	public UserDetailsService userDetailsService() {
+		UserDetails user = User.withDefaultPasswordEncoder().username("user").password("user").roles("USER").build();
 
-        return new InMemoryUserDetailsManager(user);
-    }
+		return new InMemoryUserDetailsManager(user);
+	}
 }

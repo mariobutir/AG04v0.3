@@ -1,67 +1,79 @@
 package packageOne;
 
-import java.net.URI;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@RestController
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+@Controller
 public class ArticleController {
 
 	@Autowired
-	private ArticleRepository articleRepository;
+	ArticleRepository articleRepository;
 
-	@GetMapping("/articles")
-	public List<Article> retrieveAllArticles() {
-		return articleRepository.findAll();
-	}
+	private static final int BUTTONS_TO_SHOW = 3;
+	private static final int INITIAL_PAGE = 0;
+	private static final int INITIAL_PAGE_SIZE = 5;
+	private static final int[] PAGE_SIZES = { 5, 10 };
 
-	@GetMapping("/articles/{id}")
-	public Article retrieveArticle(@PathVariable long id) throws ArticleNotFoundException {
-		Optional<Article> article = articleRepository.findById(id);
+	@GetMapping("/")
+	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
+			@RequestParam("page") Optional<Integer> page) {
+		if (articleRepository.count() != 0) {
+			;// pass
+		}else {
+			addtorepository();
+		}
 
-		if (!article.isPresent())
-			throw new ArticleNotFoundException();
-		
-		return article.get();
-	}
+		ModelAndView modelAndView = new ModelAndView("articles");
 
-	@DeleteMapping("/articles/{id}")
-	public void deleteArticle(@PathVariable long id) {
-		articleRepository.deleteById(id);
-	}
+		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
 
-	@PostMapping("/articles")
-	public ResponseEntity<Object> createArticle(@RequestBody Article article) {
-		Article savedArticle = articleRepository.save(article);
+		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
 
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(savedArticle.getId()).toUri();
+		System.out.println("here is article repo " + articleRepository.findAll());
 
-		return ResponseEntity.created(location).build();
+		Page<Article> articleList = articleRepository.findAll(PageRequest.of(evalPage, evalPageSize));
+		System.out.println("article list get total pages" + articleList.getTotalPages() + "article list get number "
+				+ articleList.getNumber());
+		PagerModel pager = new PagerModel(articleList.getTotalPages(), articleList.getNumber(), BUTTONS_TO_SHOW);
+		modelAndView.addObject("articleList", articleList);
 
+		modelAndView.addObject("selectedPageSize", evalPageSize);
+
+		modelAndView.addObject("pageSizes", PAGE_SIZES);
+
+		modelAndView.addObject("pager", pager);
+		return modelAndView;
 	}
 	
-	@PutMapping("/articles/{id}")
-	public ResponseEntity<Object> updateArticle(@RequestBody Article article, @PathVariable long id) {
-
-		Optional<Article> articleOptional = articleRepository.findById(id);
-
-		if (!articleOptional.isPresent())
-			return ResponseEntity.notFound().build();
-
-		article.setId(id);
+	public void addtorepository(){
+		
+		String string = "January 2, 2010";
+		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+		Date date = null;
+		try {
+			date = format.parse(string);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Article article = new Article(date, 1L, "Samsung", "/samsung", "user", 0L);
 		articleRepository.save(article);
-		return ResponseEntity.noContent().build();
 	}
+
 }
