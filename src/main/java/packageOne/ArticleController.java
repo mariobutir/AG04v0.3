@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 @Controller
+@Transactional
 public class ArticleController {
 
 	@Autowired
@@ -32,11 +35,8 @@ public class ArticleController {
 	@GetMapping("/")
 	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
 			@RequestParam("page") Optional<Integer> page) {
-		if (articleRepository.count() != 0) {
-			;// pass
-		}else {
-			addtorepository();
-		}
+		
+		addtorepository();
 
 		ModelAndView modelAndView = new ModelAndView("articles");
 
@@ -72,8 +72,7 @@ public class ArticleController {
 			e.printStackTrace();
 		}
 		
-		Article article = new Article(date, 1L, "Samsung", "/samsung", "user", 0L);
+		Article article = new Article(date, 1L, "Samsung", "/samsung", "user", 0);
 		articleRepository.save(article);
 	}
-
 }

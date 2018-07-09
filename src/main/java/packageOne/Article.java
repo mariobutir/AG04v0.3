@@ -7,20 +7,29 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 @Entity
+@Table
 public class Article {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column
     private Long id;
+    @Column
     private Date vrijemeUnosa;
+    @Column
     private Long idKorisnika;
+    @Column
     private String naslov;
+    @Column
     private String url;
+    @Column
     private String autor;
-    private Long brojGlasova;
+    @Column
+    private int brojGlasova;
 
 	public Long getId() {
 		return id;
@@ -69,18 +78,18 @@ public class Article {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-
-	public long getBrojGlasova() {
-		return brojGlasova;
+	
+	public int getBrojGlasova() {
+		return this.brojGlasova;
 	}
-
-	public void setBrojGlasova(long brojGlasova) {
-		this.brojGlasova = brojGlasova;
+	
+	public void setBrojGlasova(int broj) {
+		this.brojGlasova = broj;
 	}
 
     protected Article() {}
 
-    public Article(Date vrijemeUnosa, Long idKorisnika, String naslov, String url, String autor, long brojGlasova) {
+    public Article(Date vrijemeUnosa, Long idKorisnika, String naslov, String url, String autor, int brojGlasova) {
         this.vrijemeUnosa = vrijemeUnosa;
         this.idKorisnika = idKorisnika;
         this.naslov = naslov;
@@ -91,9 +100,7 @@ public class Article {
 
     @Override
     public String toString() {
-        return String.format(
-                "'%s' - '%s'",
-                naslov, autor);
+        return naslov + " - " + autor;
     }
 
 }
