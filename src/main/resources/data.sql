@@ -1,4 +1,4 @@
-insert into article (vrijemeUnosa,idKorisnika,naslov,url,autor,brojGlasova)
+insert into Article (vrijemeUnosa,idKorisnika,naslov,url,autor,brojGlasova)
 values(TO_DATE('17/12/2017', 'DD/MM/YYYY'),00001,'What is spring?','/what-is-spring','user',0),
 (TO_DATE('20/11/2015', 'DD/MM/YYYY'),00001,'Java8','/java8','user',0),
 (TO_DATE('17/11/2017', 'DD/MM/YYYY'),00001,'Hibernate','/hibernate','user',0),

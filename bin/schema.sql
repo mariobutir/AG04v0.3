@@ -3,7 +3,7 @@ DROP SCHEMA IF EXISTS articles;
 CREATE SCHEMA articles;
 USE articles;
 
-CREATE TABLE article (
+CREATE TABLE Article (
 	id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY,
     vrijemeUnosa DATE,
     idKorisnika BIGINT,

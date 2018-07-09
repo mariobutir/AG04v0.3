@@ -32,12 +32,10 @@ public class ArticleController {
 	private static final int INITIAL_PAGE_SIZE = 5;
 	private static final int[] PAGE_SIZES = { 5, 10 };
 
-	@GetMapping("/")
+	@GetMapping("/articles")
 	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
 			@RequestParam("page") Optional<Integer> page) {
 		
-		addtorepository();
-
 		ModelAndView modelAndView = new ModelAndView("articles");
 
 		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
@@ -60,6 +58,7 @@ public class ArticleController {
 		return modelAndView;
 	}
 	
+/*
 	public void addtorepository(){
 		
 		String string = "January 2, 2010";
@@ -75,4 +74,5 @@ public class ArticleController {
 		Article article = new Article(date, 1L, "Samsung", "/samsung", "user", 0);
 		articleRepository.save(article);
 	}
+*/
 }

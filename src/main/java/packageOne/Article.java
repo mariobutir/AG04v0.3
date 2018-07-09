@@ -29,7 +29,7 @@ public class Article {
     @Column
     private String autor;
     @Column
-    private int brojGlasova;
+    private Integer brojGlasova;
 
 	public Long getId() {
 		return id;

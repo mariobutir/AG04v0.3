@@ -28,19 +28,15 @@
 
 </head>
 <body>
-
-	<!-- START PAGE CONTAINER -->
+	<h2 th:inline="text">Welcome, [[${#httpServletRequest.remoteUser}]]!</h2>
 	<div class="container-fluid">
-		<!-- START PAGE SIDEBAR -->
-		<!-- commented out     <div th:replace="fragments/header :: header">&nbsp;</div> -->
-		<!-- END PAGE SIDEBAR -->
-		<!-- PAGE TITLE -->
+
 		<div class="page-title">
-			<h2>
+			<h3>
 				<span class="fa fa-arrow-circle-o-left"></span> Articles
-			</h2>
+			</h3>
 		</div>
-		<!-- END PAGE TITLE -->
+		
 		<div class="row">
 			<table class="table datatable">
 				<thead>
@@ -69,35 +65,34 @@
 					<ul class="pagination">
 						<li th:class="${articleList.number == 0} ? disabled"><a
 							class="pageLink"
-							th:href="@{/(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+							th:href="@{/articles(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
 						</li>
 						<li th:class="${articleList.number == 0} ? disabled"><a
 							class="pageLink"
-							th:href="@{/(pageSize=${selectedPageSize}, page=${articleList.number})}">&larr;</a>
+							th:href="@{/articles(pageSize=${selectedPageSize}, page=${articleList.number})}">&larr;</a>
 						</li>
 						<li
 							th:class="${articleList.number == (page - 1)} ? 'active pointer-disabled'"
 							th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
 							<a class="pageLink"
-							th:href="@{/(pageSize=${selectedPageSize}, page=${page})}"
+							th:href="@{/articles(pageSize=${selectedPageSize}, page=${page})}"
 							th:text="${page}"></a>
 						</li>
 						<li
 							th:class="${articleList.number + 1 == articleList.totalPages} ? disabled">
 							<a class="pageLink"
-							th:href="@{/(pageSize=${selectedPageSize}, page=${articleList.number + 2})}">&rarr;</a>
+							th:href="@{/articles(pageSize=${selectedPageSize}, page=${articleList.number + 2})}">&rarr;</a>
 						</li>
 						<li
 							th:class="${articleList.number + 1 == articleList.totalPages} ? disabled">
 							<a class="pageLink"
-							th:href="@{/(pageSize=${selectedPageSize}, page=${articleList.totalPages})}">&raquo;</a>
+							th:href="@{/articles(pageSize=${selectedPageSize}, page=${articleList.totalPages})}">&raquo;</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
-		<!-- END PAGE CONTENT -->
-		<!-- END PAGE CONTAINER -->
+
 	</div>
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"
 		integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="
@@ -117,16 +112,16 @@
 		function changePageAndSize() {
 			$('#pageSizeSelect').change(
 					function(evt) {
-						window.location.replace("/?pageSize=" + this.value
+						window.location.replace("/articles?pageSize=" + this.value
 								+ "&page=1");
 					});
 		}
 		/*]]>*/
 	</script>
-<!--
+
 	<form th:action="@{/logout}" method="post">
 		<input type="submit" value="Sign Out" />
 	</form>	
--->
+	
 </body>
 </html>

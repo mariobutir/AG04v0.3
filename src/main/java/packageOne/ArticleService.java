@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 public class ArticleService {
 
 	private ArticleRepository articleRepository;
+	
+	public ArticleService(ArticleRepository articleRepository) {
+		this.articleRepository = articleRepository;
+	}
 
 	public void insert(Article article) {
 		this.articleRepository.saveAndFlush(article);
@@ -22,7 +26,7 @@ public class ArticleService {
 		return this.articleRepository.findAll();
 	}
 
-	public void add(final Article article) {
+	public void add(Article article) {
 		this.articleRepository.saveAndFlush(article);
 	}
 }
