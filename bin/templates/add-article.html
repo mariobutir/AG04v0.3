@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+
+<style>
+h1 {
+	color: #78ab46;
+}
+
+footer {
+	position: fixed;
+	height: 50px;
+	bottom: 0;
+	width: 100%;
+	background-color: #ccc
+}
+
+footer p {
+	padding: 15px;
+}
+
+.error-message {
+	color: #a94442;
+}
+
+.error-message:first-letter {
+	text-transform: capitalize;
+}
+</style>
+
+<title>Add new article</title>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+
+				<div th:if="${param.success}">
+					<div class="alert alert-info">You've successfully added new
+						article!</div>
+				</div>
+
+				<h1>Add new article</h1>
+				<form th:action="@{/add-article}" th:object="${article}"
+					method="post">
+
+					<p class="error-message" th:if="${#fields.hasGlobalErrors()}"
+						th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
+						error</p>
+
+					<div class="form-group">
+						<label for="naslov" class="control-label">Naslov</label> <input
+							id="naslov" class="form-control" th:field="*{naslov}" />
+						<p class="error-message"
+							th:each="error: ${#fields.errors('naslov')}" th:text="${error}">Validation
+							error</p>
+					</div>
+					<div class="form-group"
+						th:classappend="${#fields.hasErrors('autor')}? 'has-error':''">
+						<label for="autor" class="control-label">Autor</label> <input
+							id="autor" class="form-control" th:field="*{autor}" />
+						<p class="error-message"
+							th:each="error : ${#fields.errors('autor')}" th:text="${error}">Validation
+							error</p>
+					</div>
+					<div class="form-group"
+						th:classappend="${#fields.hasErrors('url')}? 'has-error':''">
+						<label for="url" class="control-label">URL</label> <input
+							id="url" class="form-control" th:field="*{url}" />
+						<p class="error-message"
+							th:each="error : ${#fields.errors('url')}" th:text="${error}">Validation
+							error</p>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-success">Publish</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript"
+		th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
+	<script type="text/javascript"
+		th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

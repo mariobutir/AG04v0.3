@@ -1,19 +1,17 @@
 package packageOne;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,6 +24,12 @@ public class ArticleController {
 
 	@Autowired
 	ArticleRepository articleRepository;
+	ArticleService articleService;
+	
+    @ModelAttribute("article")
+    public Article article() {
+        return new Article();
+    }
 
 	private static final int BUTTONS_TO_SHOW = 3;
 	private static final int INITIAL_PAGE = 0;
@@ -57,6 +61,20 @@ public class ArticleController {
 		modelAndView.addObject("pager", pager);
 		return modelAndView;
 	}
+	
+	@GetMapping("/add-article")
+	public String addArticles(@ModelAttribute Article article,
+	        BindingResult result, Model model) {
+
+        if (result.hasErrors()){
+            return "registration";
+        }
+        
+        articleService.add(article);
+        return "redirect:/registration?success";
+    }
+	//popravit ovo
+	
 	
 /*
 	public void addtorepository(){
