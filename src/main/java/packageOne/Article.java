@@ -1,13 +1,17 @@
 package packageOne;
 
-import java.util.Date;
-
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table
@@ -18,17 +22,21 @@ public class Article {
 	@Column
 	private Long id;
 	@Column
-	private Date vrijemeUnosa;
+	private Timestamp vrijemeunosa;
 	@Column
-	private Long idKorisnika;
+	private String korisnik;
 	@Column
+	@NotEmpty(message = "Molimo unesite naziv clanka.")
 	private String naslov;
 	@Column
+	@NotBlank(message = "Uneseni link nije ispravan.")
+	@URL
 	private String url;
 	@Column
+	@NotEmpty(message = "Molimo unesite ime autora.")
 	private String autor;
 	@Column
-	private Integer brojGlasova;
+	private Integer brojglasova;
 
 	public Long getId() {
 		return id;
@@ -38,20 +46,20 @@ public class Article {
 		this.id = id;
 	}
 
-	public Date getVrijemeUnosa() {
-		return vrijemeUnosa;
+	public java.sql.Timestamp getvrijemeunosa() {
+		return vrijemeunosa;
 	}
 
-	public void setVrijemeUnosa(Date vrijemeUnosa) {
-		this.vrijemeUnosa = vrijemeUnosa;
+	public void setvrijemeunosa(Timestamp timestamp) {
+		this.vrijemeunosa = timestamp;
 	}
 
-	public Long getIdKorisnika() {
-		return idKorisnika;
+	public String getKorisnik() {
+		return korisnik;
 	}
 
-	public void setIdKorisnika(Long idKorisnika) {
-		this.idKorisnika = idKorisnika;
+	public void setKorisnik(String korisnik) {
+		this.korisnik = korisnik;
 	}
 
 	public String getNaslov() {
@@ -78,24 +86,25 @@ public class Article {
 		this.autor = autor;
 	}
 
-	public int getBrojGlasova() {
-		return this.brojGlasova;
+	public long getbrojglasova() {
+		return this.brojglasova;
 	}
 
-	public void setBrojGlasova(int broj) {
-		this.brojGlasova = broj;
+	public void setbrojglasova(Integer broj) {
+		this.brojglasova = broj;
 	}
 
 	protected Article() {
 	}
 
-	public Article(Date vrijemeUnosa, Long idKorisnika, String naslov, String url, String autor, int brojGlasova) {
-		this.vrijemeUnosa = vrijemeUnosa;
-		this.idKorisnika = idKorisnika;
+	public Article(Timestamp vrijemeunosa, String korisnik, String naslov, String url, String autor,
+			Integer brojglasova) {
+		this.vrijemeunosa = vrijemeunosa;
+		this.korisnik = korisnik;
 		this.naslov = naslov;
 		this.url = url;
 		this.autor = autor;
-		this.brojGlasova = brojGlasova;
+		this.brojglasova = brojglasova;
 	}
 
 	@Override

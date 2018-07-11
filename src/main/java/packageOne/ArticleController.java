@@ -1,8 +1,10 @@
 package packageOne;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Controller
 @Transactional
@@ -62,17 +67,24 @@ public class ArticleController {
 	public String addArticle(Model model) {
 		Article article = new Article();
 		model.addAttribute("article", article);
+
 		return "add-article";
 	}
-	
+
 	@PostMapping("/add-article")
-    public String article(@ModelAttribute("article") Article article, BindingResult bindingResult, Model model) {
+	public String article(@Valid @ModelAttribute("article") Article article, BindingResult bindingResult, Model model) {
 
-        if (bindingResult.hasErrors()) {
-            return "add-article";
-        }
+		if (bindingResult.hasErrors()) {
+			return "add-article";
+		}
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
 
-        articleService.add(article);
-        return "redirect:/articles";
-    }
+		article.setKorisnik(name);
+		article.setbrojglasova(0);
+		article.setvrijemeunosa(java.sql.Timestamp.valueOf(LocalDateTime.now()));
+		articleService.add(article);
+		return "redirect:/articles";
+	}
 }

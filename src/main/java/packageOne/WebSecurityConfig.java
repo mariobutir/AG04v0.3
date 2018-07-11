@@ -16,7 +16,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/login","/webjars/**").permitAll().antMatchers("/h2_console/**").hasAnyRole()
-				.anyRequest().authenticated().antMatchers("/articles/**").authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/articles")
+				.anyRequest().authenticated().antMatchers("/add-articles/**","/articles/**").authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/articles")
 				.permitAll().and().logout().permitAll();
 		http.exceptionHandling().accessDeniedPage("/403");
 		http.csrf().disable();
