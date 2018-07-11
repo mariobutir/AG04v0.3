@@ -73,6 +73,6 @@ public class ArticleController {
         }
 
         articleService.add(article);
-        return "redirect:/add-articles?success";
+        return "redirect:/articles";
     }
 }

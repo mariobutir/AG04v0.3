@@ -27,6 +27,6 @@ public class ArticleService {
 	}
 
 	public void add(Article article) {
-		this.articleRepository.saveAndFlush(article);
+		this.articleRepository.save(article);
 	}
 }
