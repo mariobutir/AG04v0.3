@@ -3,7 +3,6 @@ package packageOne;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,12 +24,8 @@ public class ArticleController {
 
 	@Autowired
 	ArticleRepository articleRepository;
+	@Autowired
 	ArticleService articleService;
-	
-    @ModelAttribute("article")
-    public Article article() {
-        return new Article();
-    }
 
 	private static final int BUTTONS_TO_SHOW = 3;
 	private static final int INITIAL_PAGE = 0;
@@ -39,7 +35,7 @@ public class ArticleController {
 	@GetMapping("/articles")
 	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
 			@RequestParam("page") Optional<Integer> page) {
-		
+
 		ModelAndView modelAndView = new ModelAndView("articles");
 
 		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
@@ -61,36 +57,22 @@ public class ArticleController {
 		modelAndView.addObject("pager", pager);
 		return modelAndView;
 	}
-	
-	@GetMapping("/add-article")
-	public String addArticles(@ModelAttribute Article article,
-	        BindingResult result, Model model) {
 
-        if (result.hasErrors()){
-            return "registration";
-        }
-        
-        articleService.add(article);
-        return "redirect:/registration?success";
-    }
-	//popravit ovo
-	
-	
-/*
-	public void addtorepository(){
-		
-		String string = "January 2, 2010";
-		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-		Date date = null;
-		try {
-			date = format.parse(string);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Article article = new Article(date, 1L, "Samsung", "/samsung", "user", 0);
-		articleRepository.save(article);
+	@GetMapping("/add-article")
+	public String addArticle(Model model) {
+		Article article = new Article();
+		model.addAttribute("article", article);
+		return "add-article";
 	}
-*/
+	
+	@PostMapping("/add-article")
+    public String article(@ModelAttribute("article") Article article, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "add-article";
+        }
+
+        articleService.add(article);
+        return "redirect:/add-articles?success";
+    }
 }

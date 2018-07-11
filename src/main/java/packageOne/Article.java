@@ -9,27 +9,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
 @Table
 public class Article {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column
-    private Long id;
-    @Column
-    private Date vrijemeUnosa;
-    @Column
-    private Long idKorisnika;
-    @Column
-    private String naslov;
-    @Column
-    private String url;
-    @Column
-    private String autor;
-    @Column
-    private Integer brojGlasova;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
+	@Column
+	private Date vrijemeUnosa;
+	@Column
+	private Long idKorisnika;
+	@Column
+	private String naslov;
+	@Column
+	private String url;
+	@Column
+	private String autor;
+	@Column
+	private Integer brojGlasova;
 
 	public Long getId() {
 		return id;
@@ -42,7 +41,7 @@ public class Article {
 	public Date getVrijemeUnosa() {
 		return vrijemeUnosa;
 	}
-	
+
 	public void setVrijemeUnosa(Date vrijemeUnosa) {
 		this.vrijemeUnosa = vrijemeUnosa;
 	}
@@ -78,29 +77,30 @@ public class Article {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-	
+
 	public int getBrojGlasova() {
 		return this.brojGlasova;
 	}
-	
+
 	public void setBrojGlasova(int broj) {
 		this.brojGlasova = broj;
 	}
 
-    protected Article() {}
+	protected Article() {
+	}
 
-    public Article(Date vrijemeUnosa, Long idKorisnika, String naslov, String url, String autor, int brojGlasova) {
-        this.vrijemeUnosa = vrijemeUnosa;
-        this.idKorisnika = idKorisnika;
-        this.naslov = naslov;
-        this.url = url;
-        this.autor = autor;
-        this.brojGlasova = brojGlasova;
-    }
+	public Article(Date vrijemeUnosa, Long idKorisnika, String naslov, String url, String autor, int brojGlasova) {
+		this.vrijemeUnosa = vrijemeUnosa;
+		this.idKorisnika = idKorisnika;
+		this.naslov = naslov;
+		this.url = url;
+		this.autor = autor;
+		this.brojGlasova = brojGlasova;
+	}
 
-    @Override
-    public String toString() {
-        return naslov + " - " + autor;
-    }
+	@Override
+	public String toString() {
+		return naslov + " - " + autor;
+	}
 
 }
