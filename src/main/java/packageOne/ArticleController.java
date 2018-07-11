@@ -39,7 +39,7 @@ public class ArticleController {
 
 	@GetMapping("/articles")
 	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
-			@RequestParam("page") Optional<Integer> page) {
+			@RequestParam("page") Optional<Integer> page, Model model) {
 
 		ModelAndView modelAndView = new ModelAndView("articles");
 
@@ -62,6 +62,16 @@ public class ArticleController {
 		modelAndView.addObject("pager", pager);
 		return modelAndView;
 	}
+	
+	@PostMapping("/articles")
+	public String saveJob(@RequestParam(value = "action") String accept) {
+		if (accept == "up") {
+	        Article article = articleRepository.findById();
+	        //dovršit...
+	    }
+		
+		return "articles";
+	}
 
 	@GetMapping("/add-article")
 	public String addArticle(Model model) {
@@ -77,7 +87,7 @@ public class ArticleController {
 		if (bindingResult.hasErrors()) {
 			return "add-article";
 		}
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String name = auth.getName();
 
