@@ -35,7 +35,7 @@ public class Article {
 	@NotEmpty(message = "Molimo unesite ime autora.")
 	private String autor;
 	@Column
-	private Integer brojglasova;
+	public Integer brojglasova;
 
 	public Long getId() {
 		return id;

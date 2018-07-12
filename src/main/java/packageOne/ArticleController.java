@@ -37,7 +37,7 @@ public class ArticleController {
 	private static final int INITIAL_PAGE_SIZE = 5;
 	private static final int[] PAGE_SIZES = { 5, 10 };
 
-	@GetMapping({ "/articles", "/delete-article" })
+	@GetMapping("/articles")
 	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
 			@RequestParam("page") Optional<Integer> page, Model model) {
 
@@ -67,16 +67,16 @@ public class ArticleController {
 	public String saveJob(@RequestParam(value = "articleid") Long id, @RequestParam(value = "votevalue") String vote) {
 		Article article = articleService.findById(id);
 		Integer broj = (int) article.getbrojglasova();
-		
+
 		System.out.println("----------" + id);
 		System.out.println("----------" + vote);
-		
+
 		if (vote.equals("up")) {
 			article.setbrojglasova(broj + 1);
 		} else {
 			article.setbrojglasova(broj - 1);
 		}
-		
+
 		return "redirect:/articles";
 	}
 
@@ -105,11 +105,47 @@ public class ArticleController {
 		return "redirect:/articles";
 	}
 
+	@GetMapping("/delete-article")
+	public ModelAndView homepage2(@RequestParam("pageSize") Optional<Integer> pageSize,
+			@RequestParam("page") Optional<Integer> page, Model model) {
+
+		ModelAndView modelAndView = new ModelAndView("delete-article");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
+
+		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
+
+		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
+
+		System.out.println("here is article repo " + articleRepository.findAll());
+
+		Page<Article> articleList = articleRepository.findAll(PageRequest.of(evalPage, evalPageSize));
+
+		System.out.println("article list get total pages" + articleList.getTotalPages() + "article list get number "
+				+ articleList.getNumber());
+
+		PagerModel pager = new PagerModel(articleList.getTotalPages(), articleList.getNumber(), BUTTONS_TO_SHOW);
+		modelAndView.addObject("articleList", articleList);
+
+		modelAndView.addObject("selectedPageSize", evalPageSize);
+
+		modelAndView.addObject("pageSizes", PAGE_SIZES);
+
+		modelAndView.addObject("pager", pager);
+		return modelAndView;
+	}
+
 	@PostMapping("/delete-article")
-	public String deleteArticle(@RequestParam(value = "article") Long[] id) {
-		for (Long articleid : id) {
-			articleRepository.delete(articleService.findById(articleid));
+	public String delete(@RequestParam(value = "articlesid", required = false) Long[] articles) {
+		if (articles != null) {
+			for (int i = 0; i < articles.length; i++) {
+				if (articleRepository.existsById(articles[i])) {
+					articleRepository.deleteById(articles[i]);
+				}
+			}
 		}
-		return "redirect:/articles";
+
+		return "redirect:/delete-article";
+
 	}
 }

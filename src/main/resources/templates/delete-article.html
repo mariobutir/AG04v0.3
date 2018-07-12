@@ -31,85 +31,89 @@
 		<a th:href="@{/delete-article}">Welcome,
 			[[${#httpServletRequest.remoteUser}]]!</a>
 	</h2>
+	<form th:action="@{/delete-article}" method="post" id="deleting">
+		<div class="container-fluid">
 
-	<div class="container-fluid">
+			<div class="page-title">
+				<h3>
+					<span class="fa fa-arrow-circle-o-left"></span> <a
+						th:href="@{/articles}">Articles</a>
+				</h3>
+			</div>
 
-		<div class="page-title">
-			<h3>
-				<span class="fa fa-arrow-circle-o-left"></span> Articles
-			</h3>
-		</div>
-
-		<div class="row">
-			<table class="table datatable">
-				<thead>
-					<tr>
-						<th>Naslov</th>
-						<th>Autor</th>
-						<th>URL</th>
-						<th>Broj glasova</th>
-						<th>Označi za obrisati</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="articleList : ${articleList}">
-						<td><a target="_blank" th:href="@{${articleList.url}}"> <i
-								th:text="${articleList.naslov}">Text ...</i>
-						</a></td>
-						<td th:text="${articleList.autor}">Text ...</td>
-						<td th:text="${articleList.url}">Text ...</td>
-						<td th:text="${articleList.brojglasova}">Text ...</td>
-						<td>
-							<form th:action="@{/delete-article}" method="post" id="deleting">
-								<input type="checkbox" name="article[]"
-									value="${articleList.id}" />
-							</form>
-						</td>
-					</tr>
-				</tbody>
-			</table>
 			<div class="row">
-				<div class="form-group col-md-1">
-					<select class="form-control pagination" id="pageSizeSelect">
-						<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
-							th:value="${pageSize}"
-							th:selected="${pageSize} == ${selectedPageSize}"></option>
-					</select>
-				</div>
-				<div th:if="${articleList.totalPages != 1}"
-					class="form-group col-md-11 pagination-centered">
-					<ul class="pagination">
-						<li th:class="${articleList.number == 0} ? disabled"><a
-							class="pageLink"
-							th:href="@{/articles(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
-						</li>
-						<li th:class="${articleList.number == 0} ? disabled"><a
-							class="pageLink"
-							th:href="@{/articles(pageSize=${selectedPageSize}, page=${articleList.number})}">&larr;</a>
-						</li>
-						<li
-							th:class="${articleList.number == (page - 1)} ? 'active pointer-disabled'"
-							th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-							<a class="pageLink"
-							th:href="@{/articles(pageSize=${selectedPageSize}, page=${page})}"
-							th:text="${page}"></a>
-						</li>
-						<li
-							th:class="${articleList.number + 1 == articleList.totalPages} ? disabled">
-							<a class="pageLink"
-							th:href="@{/articles(pageSize=${selectedPageSize}, page=${articleList.number + 2})}">&rarr;</a>
-						</li>
-						<li
-							th:class="${articleList.number + 1 == articleList.totalPages} ? disabled">
-							<a class="pageLink"
-							th:href="@{/articles(pageSize=${selectedPageSize}, page=${articleList.totalPages})}">&raquo;</a>
-						</li>
-					</ul>
+
+				<table class="table datatable">
+					<thead>
+						<tr>
+							<th>Naslov</th>
+							<th>Autor</th>
+							<th>URL</th>
+							<th>Broj glasova</th>
+							<th>Označi za obrisati</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr th:each="articleList : ${articleList}"
+							th:if="${articleList.korisnik == #request.userPrincipal.principal.username}">
+							<td><a target="_blank" th:href="@{${articleList.url}}">
+									<i th:text="${articleList.naslov}">Text ...</i>
+							</a></td>
+							<td th:text="${articleList.autor}">Text ...</td>
+							<td th:text="${articleList.url}">Text ...</td>
+							<td th:text="${articleList.brojglasova}">Text ...</td>
+							<td><input type="checkbox" name="articlesid"
+								th:value="${articleList.id}" /></td>
+						</tr>
+					</tbody>
+				</table>
+
+
+				<div class="row">
+					<div class="form-group col-md-1">
+						<select class="form-control pagination" id="pageSizeSelect">
+							<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+								th:value="${pageSize}"
+								th:selected="${pageSize} == ${selectedPageSize}"></option>
+						</select>
+					</div>
+					<div th:if="${articleList.totalPages != 1}"
+						class="form-group col-md-11 pagination-centered">
+						<ul class="pagination">
+							<li th:class="${articleList.number == 0} ? disabled"><a
+								class="pageLink"
+								th:href="@{/delete-article(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+							</li>
+							<li th:class="${articleList.number == 0} ? disabled"><a
+								class="pageLink"
+								th:href="@{/delete-article(pageSize=${selectedPageSize}, page=${articleList.number})}">&larr;</a>
+							</li>
+							<li
+								th:class="${articleList.number == (page - 1)} ? 'active pointer-disabled'"
+								th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+								<a class="pageLink"
+								th:href="@{/delete-article(pageSize=${selectedPageSize}, page=${page})}"
+								th:text="${page}"></a>
+							</li>
+							<li
+								th:class="${articleList.number + 1 == articleList.totalPages} ? disabled">
+								<a class="pageLink"
+								th:href="@{/delete-article(pageSize=${selectedPageSize}, page=${articleList.number + 2})}">&rarr;</a>
+							</li>
+							<li
+								th:class="${articleList.number + 1 == articleList.totalPages} ? disabled">
+								<a class="pageLink"
+								th:href="@{/delete-article(pageSize=${selectedPageSize}, page=${articleList.totalPages})}">&raquo;</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
 
-	</div>
+		</div>
+		<input type="submit" value="Delete" />
+	</form>
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"
 		integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="
 		crossorigin="anonymous"></script>
@@ -128,16 +132,12 @@
 		function changePageAndSize() {
 			$('#pageSizeSelect').change(
 					function(evt) {
-						window.location.replace("/articles?pageSize="
+						window.location.replace("/delete-article?pageSize="
 								+ this.value + "&page=1");
 					});
 		}
 		/*]]>*/
 	</script>
-
-	<form th:action="@{/delete-article}" method="post" id="deleting">
-		<input type="submit" value="Delete" />
-	</form>
 
 	<form th:action="@{/logout}" method="post">
 		<input type="submit" value="Sign Out" />
