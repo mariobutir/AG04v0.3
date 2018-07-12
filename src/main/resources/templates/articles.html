@@ -25,16 +25,16 @@
 }
 </style>
 
-<script>
-	function upvote() {
-	//	alert("Glas +1 zabilježen!");
-		$("#up").attr("disabled", true);
+<script th:inline="javascript">
+	function disableUp(id) {
+		alert("Glas +1 zabilježen!");
+	    document.getElementById(id).disabled = 'true';
 	}
-	function downvote() {
-	//	alert("Glas -1 zabilježen!");
-		$("#down").attr("disabled", true);
+	function disableDown(id) {
+		alert("Glas -1 zabilježen!");
+	    document.getElementById(id).disabled = 'true';
 	}
-</script>
+	</script>
 
 </head>
 <body>
@@ -42,11 +42,11 @@
 		<a th:href="@{/delete-article}">Welcome,
 			[[${#httpServletRequest.remoteUser}]]!</a>
 	</h2>
-	
+
 	<form th:action="@{/delete-article}" method="get" id="deleting">
 		<input type="submit" value="Moji uneseni članci" />
 	</form>
-	
+
 	<div class="container-fluid">
 
 		<div class="page-title">
@@ -71,14 +71,17 @@
 						</a></td>
 						<td th:text="${articleList.autor}">Text ...</td>
 						<td>
-							<form action="" th:action="@{/articles}"
-								method="post">
+							<form action="" th:action="@{/articles}" method="post">
 								<input type="hidden" name="articleid"
 									th:value="${articleList.id}" id="action" />
-								<button onclick="upvote()" type="submit" name="vote"
-									th:value="up" id="up">+</button>
-								<button onclick="downvote()" type="submit" name="vote"
-									th:value="down" id="down">-</button>
+								<button
+									th:onclick="'javascript:setTimeout(disableUp(\''+${'up' + articleList.id}+'\'), 1);'"
+									type="submit" name="vote" th:value="up"
+									th:id="${'up' + articleList.id}">+</button>
+								<button
+									th:onclick="'javascript:setTimeout(disableDown(\''+${'down' + articleList.id}+'\'), 1);'"
+									type="submit" name="vote" th:value="down"
+									th:id="${'down' + articleList.id}">-</button>
 							</form>
 						</td>
 
@@ -136,6 +139,7 @@
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>
+
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		$(document).ready(function() {

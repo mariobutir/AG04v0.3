@@ -37,7 +37,7 @@ public class ArticleController {
 	private static final int INITIAL_PAGE_SIZE = 5;
 	private static final int[] PAGE_SIZES = { 5, 10 };
 
-	@GetMapping({"/articles", "/delete-article"})
+	@GetMapping({ "/articles", "/delete-article" })
 	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
 			@RequestParam("page") Optional<Integer> page, Model model) {
 
@@ -66,16 +66,15 @@ public class ArticleController {
 	@PostMapping("/articles")
 	public String saveJob(@RequestParam(value = "articleid") Long id, @RequestParam(value = "vote") String vote) {
 		Article article = articleService.findById(id);
-		Article articleAfterVote = article;
-		int broj = (int) article.getbrojglasova();
-		if (vote == "up") {
-			articleAfterVote.setbrojglasova(broj + 1);
+		Integer broj = (int) article.getbrojglasova();
+		
+		if (vote.equals("up")) {
+			article.setbrojglasova(broj + 1);
 		} else {
-			articleAfterVote.setbrojglasova(broj - 1);
+			article.setbrojglasova(broj - 1);
 		}
-		articleService.add(articleAfterVote);
-		articleRepository.delete(article);
-		return "articles";
+		
+		return "redirect:/articles";
 	}
 
 	@GetMapping("/add-article")
@@ -102,12 +101,12 @@ public class ArticleController {
 		articleService.add(article);
 		return "redirect:/articles";
 	}
-	
+
 	@PostMapping("/delete-article")
 	public String deleteArticle(@RequestParam(value = "article") Long[] id) {
-		for(Long articleid : id) {
+		for (Long articleid : id) {
 			articleRepository.delete(articleService.findById(articleid));
 		}
-		return "redirect:/articles";	
+		return "redirect:/articles";
 	}
 }
