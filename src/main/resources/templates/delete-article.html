@@ -25,28 +25,13 @@
 }
 </style>
 
-<script>
-	function upvote() {
-	//	alert("Glas +1 zabilježen!");
-		$("#up").attr("disabled", true);
-	}
-	function downvote() {
-	//	alert("Glas -1 zabilježen!");
-		$("#down").attr("disabled", true);
-	}
-</script>
-
 </head>
 <body>
 	<h2 th:inline="text">
 		<a th:href="@{/delete-article}">Welcome,
 			[[${#httpServletRequest.remoteUser}]]!</a>
 	</h2>
-	
-	<form th:action="@{/delete-article}" method="get" id="deleting">
-		<input type="submit" value="Moji uneseni članci" />
-	</form>
-	
+
 	<div class="container-fluid">
 
 		<div class="page-title">
@@ -61,7 +46,9 @@
 					<tr>
 						<th>Naslov</th>
 						<th>Autor</th>
-						<th>Glasovanje</th>
+						<th>URL</th>
+						<th>Broj glasova</th>
+						<th>Označi za obrisati</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -70,18 +57,14 @@
 								th:text="${articleList.naslov}">Text ...</i>
 						</a></td>
 						<td th:text="${articleList.autor}">Text ...</td>
+						<td th:text="${articleList.url}">Text ...</td>
+						<td th:text="${articleList.brojglasova}">Text ...</td>
 						<td>
-							<form action="" th:action="@{/articles}"
-								method="post">
-								<input type="hidden" name="articleid"
-									th:value="${articleList.id}" id="action" />
-								<button onclick="upvote()" type="submit" name="vote"
-									th:value="up" id="up">+</button>
-								<button onclick="downvote()" type="submit" name="vote"
-									th:value="down" id="down">-</button>
+							<form th:action="@{/delete-article}" method="post" id="deleting">
+								<input type="checkbox" name="article[]"
+									value="${articleList.id}" />
 							</form>
 						</td>
-
 					</tr>
 				</tbody>
 			</table>
@@ -152,8 +135,8 @@
 		/*]]>*/
 	</script>
 
-	<form th:action="@{/add-article}" method="get">
-		<input type="submit" value="Add Article" />
+	<form th:action="@{/delete-article}" method="post" id="deleting">
+		<input type="submit" value="Delete" />
 	</form>
 
 	<form th:action="@{/logout}" method="post">

@@ -1,7 +1,6 @@
 package packageOne;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class ArticleService {
 		this.articleRepository.saveAndFlush(article);
 	}
 
-	public Optional<Article> findById(long id) {
+	public Article findById(long id) {
 		return this.articleRepository.findById(id);
 	}
 
