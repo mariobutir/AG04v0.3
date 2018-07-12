@@ -64,9 +64,12 @@ public class ArticleController {
 	}
 
 	@PostMapping("/articles")
-	public String saveJob(@RequestParam(value = "articleid") Long id, @RequestParam(value = "vote") String vote) {
+	public String saveJob(@RequestParam(value = "articleid") Long id, @RequestParam(value = "votevalue") String vote) {
 		Article article = articleService.findById(id);
 		Integer broj = (int) article.getbrojglasova();
+		
+		System.out.println("----------" + id);
+		System.out.println("----------" + vote);
 		
 		if (vote.equals("up")) {
 			article.setbrojglasova(broj + 1);

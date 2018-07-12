@@ -28,13 +28,15 @@
 <script th:inline="javascript">
 	function disableUp(id) {
 		alert("Glas +1 zabilježen!");
-	    document.getElementById(id).disabled = 'true';
+		document.getElementById(id).disabled = 'true';
+		document.getElementById("votevalue").value = "up";
 	}
 	function disableDown(id) {
 		alert("Glas -1 zabilježen!");
-	    document.getElementById(id).disabled = 'true';
+		document.getElementById(id).disabled = 'true';
+		document.getElementById("votevalue").value = "down";
 	}
-	</script>
+</script>
 
 </head>
 <body>
@@ -73,7 +75,9 @@
 						<td>
 							<form action="" th:action="@{/articles}" method="post">
 								<input type="hidden" name="articleid"
-									th:value="${articleList.id}" id="action" />
+									th:value="${articleList.id}" id="action" /> 
+								<input
+									type="hidden" name="votevalue" th:value="up" id="votevalue" />
 								<button
 									th:onclick="'javascript:setTimeout(disableUp(\''+${'up' + articleList.id}+'\'), 1);'"
 									type="submit" name="vote" th:value="up"
