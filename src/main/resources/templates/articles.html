@@ -51,27 +51,26 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="articleList : ${articleList}">
-						<td><a target="_blank" th:href="@{${articleList.url}}"> <i
-								th:text="${articleList.naslov}">Text ...</i>
+					<tr th:each="article : ${articleList}">
+						<td><a target="_blank" th:href="@{${article.url}}"> <i
+								th:text="${article.naslov}">Text ...</i>
 						</a></td>
-						<td th:text="${articleList.autor}">Text ...</td>
-						<td th:text="${articleList.brojglasova}">Text ...</td>
+						<td th:text="${article.autor}">Text ...</td>
+						<td th:text="${article.brojglasova}">Text ...</td>
 						<td>
-							<form action="" th:action="@{/articles}" method="post"
-								onsubmit="return validate(this);">
-								<input type="hidden" name="articleid"
-									th:value="${articleList.id}" id="action" /> <input
-									type="hidden" name="votevalue" th:value="up" id="votevalue" />
+							<form th:action="@{/articles}" method="post">
+								<input type="hidden" name="articleid" th:value="${article.id}"
+									id="articleid" /> <input type="hidden" name="votevalue"
+									th:id="${'votevalue' + article.id}" />
 								<button
-									th:onclick="'javascript:setTimeout(disableUp(\''+${'up' + articleList.id}+'\'), 1);'"
+									th:onclick="'javascript:setTimeout(disableUp(\''+${article.id}+'\'), 1);'"
 									type="submit" name="voteup" th:value="up"
-									th:id="${'up' + articleList.id}">+</button>
+									th:id="${'up' + article.id}">+</button>
 
 								<button
-									th:onclick="'javascript:setTimeout(disableDown(\''+${'down' + articleList.id}+'\'), 1);'"
+									th:onclick="'javascript:setTimeout(disableDown(\''+${article.id}+'\'), 1);'"
 									type="submit" name="votedown" th:value="down"
-									th:id="${'down' + articleList.id}">-</button>
+									th:id="${'down' + article.id}">-</button>
 							</form>
 						</td>
 
@@ -129,26 +128,6 @@
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>
-	<script>
-		function validate(form) {
-			if (form.votevalue.value == 'up') {
-				form.voteup.disabled = true;
-			} else {
-				form.votedown.disabled = true;
-			}
-			return true;
-		}
-	</script>
-	<script th:inline="javascript">
-		function disableUp(id) {
-			alert("Glas +1 zabilježen!");
-			document.getElementById("votevalue").value = "up";
-		}
-		function disableDown(id) {
-			alert("Glas -1 zabilježen!");
-			document.getElementById("votevalue").value = "down";
-		}
-	</script>
 
 	<script th:inline="javascript">
 		/*<![CDATA[*/
@@ -163,6 +142,27 @@
 								+ this.value + "&page=1");
 					});
 		}
+		function disableUp(id) {
+			alert("Glas +1 zabilježen!");
+			document.getElementById("votevalue" + id).value = "up";
+			//document.getElementById('up' + id).disabled = 'true';
+			//return true;
+		}
+		function disableDown(id) {
+			alert("Glas -1 zabilježen!");
+			document.getElementById("votevalue" + id).value = "down";
+			//document.getElementById('down' + id).disabled = 'true';
+			//return true;
+		}
+		function validate(form) {
+			if (form.votevalue.value == 'up') {
+				form.voteup.disabled = true;
+			} else {
+				form.votedown.disabled = true;
+			}
+			return true;
+		}
+
 		/*]]>*/
 	</script>
 

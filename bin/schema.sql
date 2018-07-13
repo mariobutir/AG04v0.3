@@ -7,3 +7,11 @@ CREATE TABLE Article (
     autor VARCHAR(255) NOT NULL,
     brojglasova INTEGER
 );
+
+CREATE TABLE UserVote (
+	korisnik VARCHAR(255),
+	articleid BIGINT,
+	up VARCHAR(255),
+	down VARCHAR(255)
+);
+	

@@ -52,6 +52,11 @@ public class ArticleController {
 		Page<Article> articleList = articleRepository.findAll(PageRequest.of(evalPage, evalPageSize));
 		System.out.println("article list get total pages" + articleList.getTotalPages() + "article list get number "
 				+ articleList.getNumber());
+
+		for (Article ar : articleRepository.findAll()) {
+			System.out.println(ar.getbrojglasova());
+		}
+
 		PagerModel pager = new PagerModel(articleList.getTotalPages(), articleList.getNumber(), BUTTONS_TO_SHOW);
 		modelAndView.addObject("articleList", articleList);
 
@@ -64,10 +69,11 @@ public class ArticleController {
 	}
 
 	@PostMapping("/articles")
-	public String saveJob(@RequestParam(value = "articleid") Long id, @RequestParam(value = "votevalue") String vote) {
+	public String saveJob (@RequestParam(value = "articleid") Long id, @RequestParam(value = "votevalue") String vote) {
+		
 		Article article = articleService.findById(id);
 		Integer broj = (int) article.getbrojglasova();
-
+		
 		System.out.println("----------" + id);
 		System.out.println("----------" + vote);
 
@@ -76,6 +82,8 @@ public class ArticleController {
 		} else {
 			article.setbrojglasova(broj - 1);
 		}
+
+		articleRepository.save(article);
 
 		return "redirect:/articles";
 	}
@@ -110,8 +118,6 @@ public class ArticleController {
 			@RequestParam("page") Optional<Integer> page, Model model) {
 
 		ModelAndView modelAndView = new ModelAndView("delete-article");
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName();
 
 		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
 
