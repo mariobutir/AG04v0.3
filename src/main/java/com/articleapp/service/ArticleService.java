@@ -1,8 +1,11 @@
-package packageOne;
+package com.articleapp.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.articleapp.model.Article;
+import com.articleapp.repository.ArticleRepository;
 
 @Service
 public class ArticleService {

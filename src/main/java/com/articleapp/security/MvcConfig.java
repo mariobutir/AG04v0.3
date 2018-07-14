@@ -1,4 +1,4 @@
-package packageOne;
+package com.articleapp.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

@@ -58,19 +58,30 @@
 						<td th:text="${article.autor}">Text ...</td>
 						<td th:text="${article.brojglasova}">Text ...</td>
 						<td>
-							<form th:action="@{/articles}" method="post">
+							<form th:action="@{/articles}" th:object="${uservote}"
+								method="post">
+
 								<input type="hidden" name="articleid" th:value="${article.id}"
-									id="articleid" /> <input type="hidden" name="votevalue"
+									id="articleid" /> 
+									
+								<input type="hidden" name="votevalue"
 									th:id="${'votevalue' + article.id}" />
+									
+								<input type="hidden" name="userarticleid" th:value="${#request.userPrincipal.principal.username + article.id}"
+									id="userarticleid" th:attr="name='userarticleid'"/>
+									
+								<input type="hidden" name="korisnik" th:value="${#request.userPrincipal.principal.username}"
+									id="articleid" th:attr="name='korisnik'"/> 
+
 								<button
 									th:onclick="'javascript:setTimeout(disableUp(\''+${article.id}+'\'), 1);'"
-									type="submit" name="voteup" th:value="up"
+									type="submit" name="voteup" th:value="up" th:attr="name='vote'"
 									th:id="${'up' + article.id}">+</button>
 
 								<button
 									th:onclick="'javascript:setTimeout(disableDown(\''+${article.id}+'\'), 1);'"
 									type="submit" name="votedown" th:value="down"
-									th:id="${'down' + article.id}">-</button>
+									th:attr="name='vote'" th:id="${'down' + article.id}">-</button>
 							</form>
 						</td>
 

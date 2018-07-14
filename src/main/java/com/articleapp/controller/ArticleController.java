@@ -1,4 +1,4 @@
-package packageOne;
+package com.articleapp.controller;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -17,6 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.articleapp.model.Article;
+import com.articleapp.model.PagerModel;
+import com.articleapp.model.Uservote;
+import com.articleapp.repository.ArticleRepository;
+import com.articleapp.repository.UserVoteRepository;
+import com.articleapp.service.ArticleService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -31,6 +38,8 @@ public class ArticleController {
 	ArticleRepository articleRepository;
 	@Autowired
 	ArticleService articleService;
+	@Autowired
+	UserVoteRepository uservoteRepository;
 
 	private static final int BUTTONS_TO_SHOW = 3;
 	private static final int INITIAL_PAGE = 0;
@@ -40,6 +49,9 @@ public class ArticleController {
 	@GetMapping("/articles")
 	public ModelAndView homepage(@RequestParam("pageSize") Optional<Integer> pageSize,
 			@RequestParam("page") Optional<Integer> page, Model model) {
+
+		Uservote uservote = new Uservote();
+		model.addAttribute("uservote", uservote);
 
 		ModelAndView modelAndView = new ModelAndView("articles");
 
@@ -69,21 +81,51 @@ public class ArticleController {
 	}
 
 	@PostMapping("/articles")
-	public String saveJob (@RequestParam(value = "articleid") Long id, @RequestParam(value = "votevalue") String vote) {
-		
-		Article article = articleService.findById(id);
-		Integer broj = (int) article.getbrojglasova();
-		
-		System.out.println("----------" + id);
-		System.out.println("----------" + vote);
+	public String saveJob(@Valid @ModelAttribute("uservote") Uservote uservote, BindingResult bindingResult,
+			Model model, @RequestParam(value = "articleid") Long id, @RequestParam(value = "votevalue") String vote,
+			@RequestParam(value = "userarticleid") String userarticleid) {
 
-		if (vote.equals("up")) {
-			article.setbrojglasova(broj + 1);
-		} else {
-			article.setbrojglasova(broj - 1);
+		if (bindingResult.hasErrors()) {
+			return "articles";
 		}
 
+		Article article = articleService.findById(id);
+		Integer broj = (int) article.getbrojglasova();
+
+		if (uservoteRepository.existsById(userarticleid)) {
+			if (uservoteRepository.findById(userarticleid).get().getVote().equals(vote)) {
+				return "redirect:/articles";
+			} else {
+				uservoteRepository.save(uservote);
+				if (vote.equals("up")) {
+					article.setbrojglasova(broj + 1);
+				} else {
+					article.setbrojglasova(broj - 1);
+				}
+			}
+		} else {
+			uservoteRepository.save(uservote);
+			if (vote.equals("up")) {
+				article.setbrojglasova(broj + 1);
+			} else {
+				article.setbrojglasova(broj - 1);
+			}
+		}
+		
 		articleRepository.save(article);
+
+		/*
+		 * Article article = articleService.findById(id); Integer broj = (int)
+		 * article.getbrojglasova();
+		 * 
+		 * System.out.println("----------" + id); System.out.println("----------" +
+		 * vote);
+		 * 
+		 * if (vote.equals("up")) { article.setbrojglasova(broj + 1); } else {
+		 * article.setbrojglasova(broj - 1); }
+		 * 
+		 * articleRepository.save(article);
+		 */
 
 		return "redirect:/articles";
 	}

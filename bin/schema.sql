@@ -8,10 +8,8 @@ CREATE TABLE Article (
     brojglasova INTEGER
 );
 
-CREATE TABLE UserVote (
-	korisnik VARCHAR(255),
-	articleid BIGINT,
-	up VARCHAR(255),
-	down VARCHAR(255)
+CREATE TABLE Uservote (
+	userarticleid VARCHAR(255) NOT NULL PRIMARY KEY,
+	korisnik VARCHAR(255) NOT NULL,
+	vote VARCHAR(255) NOT NULL
 );
-	

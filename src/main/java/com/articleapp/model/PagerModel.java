@@ -1,4 +1,4 @@
-package packageOne;
+package com.articleapp.model;
 
 public class PagerModel {
 	private int buttonsToShow = 5;

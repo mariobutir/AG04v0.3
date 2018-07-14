@@ -1,4 +1,4 @@
-package packageOne;
+package com.articleapp.model;
 
 import java.sql.Timestamp;
 import javax.persistence.Column;
@@ -93,7 +93,7 @@ public class Article {
 		this.brojglasova = broj;
 	}
 
-	protected Article() {
+	public Article() {
 	}
 
 	public Article(Timestamp vrijemeunosa, String korisnik, String naslov, String url, String autor,
